@@ -77,10 +77,10 @@ exports.update = (req, res) => {
         },
       }
     )
-    .then((result) => {
-      if (result[0] === 0) {
+    .then((data) => {
+      if (data[0] === 0) {
         res.status(404).send({
-          message: `Biodata with ID ${req.params.id} not found`,
+          message: `Biodata with Id ${req.params.id} not found`,
         });
       } else {
         res.send({ message: "Biodata updated successfully" });
