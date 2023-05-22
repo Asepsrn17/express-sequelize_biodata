@@ -1,12 +1,46 @@
 const db = require("../models");
 const Biodata = db.biodata;
 
-exports.createBiodata = (req, res) => {
-  const { name, placeBirth, dateBirth, address } = req.body;
-  db.sequelize
-    .query(
-      `INSERT INTO person_data(name, placeBirth, dateBirth, address, createdAt, updatedAt) VALUES('${name}', '${placeBirth}', '${dateBirth}', '${address}', NOW(), NOW())`
-    )
+exports.create = (req, res) => {
+  if (!req.body) {
+    res.status(400).send({
+      message: "Content can not empety!",
+    });
+    return;
+  }
+
+  if (!req.body.nama) {
+    res.status(400).send({
+      message: "nama harus di isi!",
+    });
+    return;
+  }
+  if (!req.body["tempat lahir"]) {
+    res.status(400).send({
+      message: "tempat lahir harus di isi!",
+    });
+    return;
+  }
+  if (!req.body["tanggal lahir"]) {
+    res.status(400).send({
+      message: "tanggal lahir harus di isi!",
+    });
+    return;
+  }
+  if (!req.body.alamat) {
+    res.status(400).send({
+      message: "alamat harus di isi!",
+    });
+    return;
+  }
+  const biodata = {
+    nama: req.body.nama,
+    tempat_lahir: req.body["tempat lahir"],
+    tanggal_lahir: req.body["tanggal lahir"],
+    alamat: req.body.alamat,
+  };
+
+  Biodata.create(biodata)
     .then(() => {
       res.send("Biodata created successfully");
     })
@@ -19,10 +53,7 @@ exports.createBiodata = (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-  db.sequelize
-    .query("SELECT * FROM person_data", {
-      type: db.sequelize.QueryTypes.SELECT,
-    })
+  Biodata.findAll()
     .then((data) => {
       if (data.length === 0) {
         res.status(404).send("Biodata not found");
@@ -37,16 +68,14 @@ exports.findAll = (req, res) => {
     });
 };
 
-exports.findById = (req, res) => {
-  db.sequelize
-    .query("SELECT * FROM person_data WHERE id = :id", {
-      replacements: {
-        id: req.params.id,
-      },
-      type: db.sequelize.QueryTypes.SELECT,
-    })
+exports.findOne = (req, res) => {
+  Biodata.findOne({
+    where: {
+      id: req.params.id,
+    },
+  })
     .then((data) => {
-      if (data.length === 0) {
+      if (!data) {
         res.status(404).send({
           message: `Biodata with id ${req.params.id} not found!`,
         });
@@ -62,14 +91,19 @@ exports.findById = (req, res) => {
 };
 
 exports.update = (req, res) => {
-  const { name, placeBirth, dateBirth, address } = req.body;
+  const {
+    nama,
+    "tempat lahir": tempat_lahir,
+    "tanggal lahir": tanggal_lahir,
+    alamat,
+  } = req.body;
   db.sequelize.models.person_data
     .update(
       {
-        name,
-        placeBirth,
-        dateBirth,
-        address,
+        nama,
+        tempat_lahir,
+        tanggal_lahir,
+        alamat,
       },
       {
         where: {

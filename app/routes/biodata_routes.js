@@ -17,7 +17,7 @@ router.use(
 const biodata = require("../controllers/biodata_controller");
 
 router.post("/", (req, res) => {
-  biodata.createBiodata(req, res);
+  biodata.create(req, res);
 });
 
 router.get("/", (req, res) => {
@@ -25,7 +25,7 @@ router.get("/", (req, res) => {
 });
 
 router.get("/:id", (req, res) => {
-  biodata.findById(req, res);
+  biodata.findOne(req, res);
 });
 
 router.put("/update/:id", (req, res) => {

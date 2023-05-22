@@ -1,21 +1,21 @@
 module.exports = (sequelize, Sequelize) => {
   const Biodata = sequelize.define("person_data", {
-    name: {
+    nama: {
       type: Sequelize.STRING,
       allowNull: false,
     },
 
-    placeBirth: {
+    tempat_lahir: {
       type: Sequelize.STRING,
       allowNull: false,
     },
 
-    dateBirth: {
+    tanggal_lahir: {
       type: Sequelize.DATEONLY,
       allowNull: false,
     },
 
-    address: {
+    alamat: {
       type: Sequelize.STRING,
       allowNull: false,
     },
